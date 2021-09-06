@@ -1,5 +1,5 @@
 # ARabong( 한국품질재단KFQ_AI PROJECT )
-<img src="https://user-images.githubusercontent.com/78269661/132180090-24546087-d25b-4f53-9743-8278ea830700.png"  width="300" height="400">
+<img src="https://user-images.githubusercontent.com/78269661/132180090-24546087-d25b-4f53-9743-8278ea830700.png"  width="300" height="500">
 
 ## project 로컬 실행
 + cmd - cd c:\arabong10 - python manage.py runserver
