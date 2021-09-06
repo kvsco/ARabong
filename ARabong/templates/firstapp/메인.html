@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>welcome AR라봉</title>
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png" />
+  <link rel="stylesheet" href="/static/vendor/chartist/css/chartist.min.css" />
+  <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+  <link href="/static/vendor/owl-carousel/owl.carousel.css" rel="stylesheet" />
+  <link href="/static/css/style.css" rel="stylesheet" />
+  <style>
+    .col-xl-9 {
+      background-color: gray;
+      border-radius: 20px;
+      color: white;
+      height: 300px;
+    }
+
+    .col-xl-3 {
+      background-color: black;
+      border-radius: 20px;
+      color: white;
+      height: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <!--*******************        Preloader start    ********************-->
+  <div id="preloader">
+    <div class="sk-three-bounce">
+      <div class="sk-child sk-bounce1"></div>
+      <div class="sk-child sk-bounce2"></div>
+      <div class="sk-child sk-bounce3"></div>
+    </div>
+  </div>
+  <!--*******************        Preloader end    ********************-->
+
+  <!--**********************************        Main wrapper start    ***********************************-->
+  <div id="main-wrapper">
+    {% include 'nav-header.html' %}
+    <!--**********************************             nav-header end        ***********************************-->
+    {% include 'navbar.html' %}
+    <!--**********************************             nav end        ***********************************-->
+    {% include 'sidebar.html' %}
+    <!--**********************************             Sidebar end        ***********************************-->
+
+    <!--**********************************            Content body start        ***********************************-->
+    <div class="content-body">
+      <div class="container-fluid">
+        <div class="col-sm-6">
+          <h2 class="font-w600 mb-1">
+            <button type="button" class="btn btn-rounded btn-outline-success align-center"
+              onclick="location.href = '../../board/map/';">
+              제주 AR 가상여행 시작하기
+            </button>
+          </h2>
+        </div>
+        <div class="row">
+          <div class="card col-sm-8" id="roadview" style="width: 350px; height: 400px">
+            <script type="text/javascript"
+              src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9da028bcb77ab2d58fcb50ff7440c661"></script>
+            <script>
+              var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+              var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+              var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+
+              var position = new kakao.maps.LatLng(33.515982, 126.51199);
+              roadviewClient.getNearestPanoId(
+                position,
+                50,
+                function (panoId) {
+                  roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+                }
+              );
+            </script>
+            <div class="card">
+              <div class="card-header border-0 pb-0"></div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <!-- # 추천장소리스트 -->
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">추천 장소리스트</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>place</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if user_num %}
+                      <!---->
+                      {% for c in user_num %}
+                      <tr onClick="window.open('/chat/{{c.roomUrl}}')" style="cursor:pointer;">
+                        <td>
+                          <span>{{c.roomName}}</span>
+                        </td>
+                        <td>
+                          {% if c.userCount > 10 %}
+                          <span class="badge light badge-danger">{{c.userCount}}명 접속 중</span>
+                          {% elif c.userCount > 5  %}
+                          <span class="badge light badge-info">{{c.userCount}}명 접속 중</span>
+                          {% elif c.userCount > 1  %}
+                          <span class="badge light badge-success">{{c.userCount}}명 접속 중</span>
+                          {% else %}
+                          <span class="badge light badge-dark">1명 이하 접속 중</span>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      {% endfor %}
+                      <!---->
+                      {% else %}
+                      <tr>
+                        <td>바다</td>
+                        <td><span class="badge badge-success">Good</span></td>
+                      </tr>
+                      <tr>
+                        <td>홍대거리</td>
+                        <td>
+                          <span class="badge badge-danger light">Full</span>
+                        </td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- # card -->
+          </div>
+          <br /><br /><br />
+          <!-- # 하단 fast menu? -->
+          <div class="col-xxl-12">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="card-bx stacked card">
+                  <img src="{% static 'images/card/card1.jpg'%}" alt="" />
+                  <div class="card-info">
+                    <p class="mb-1 text-white fs-14">약속게시판</p>
+                    <div class="d-flex justify-content-left">
+                      <tbody>
+                        {% if promise %}
+                        <!---->
+                        <div class="Column">
+                          {% for p in promise %}
+                          <a class="text-white mb-3 font-w400" href="../../../board/promise_read/{{p.id}}">[{{p.time}}]
+                            {{p.title}} / {{p.name}}</a><br />
+                          {% endfor %}
+                        </div>
+                        <!---->
+                        {% endif %}
+                      </tbody>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card-bx stacked card">
+                  <img src="{% static 'images/card/card2.jpg'%}" alt="" />
+                  <div class="card-info">
+                    <p class="fs-14 mb-1 text-white">Main Balance</p>
+                    <div class="d-flex justify-content-center">
+                      <h2 class="num-text text-white mb-5 font-w600">
+                        뉴스 게시판
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card-bx stacked card">
+                  <img src="{% static 'images/card/card3.jpg'%}" alt="" />
+                  <div class="card-info">
+                    <p class="mb-1 text-white fs-14">익명 게시판</p>
+                    <div class="d-flex justify-content-left">
+                      <tbody>
+                        {% if anonymous %}
+                        <!---->
+                        <div class="Column">
+                          {% for a in anonymous %}
+                          <a class="text-white mb-3 font-w400" href="../../../board/board_read/{{a.id}}">[{{a.date}}]
+                            {{a.title}}</a><br />
+                          {% endfor %}
+                        </div>
+                        <!---->
+                        {% endif %}
+                      </tbody>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card-bx stacked card">
+                  <img src="{% static 'images/card/card4.jpg'%}" alt="" />
+                  <div class="card-info">
+                    <p class="mb-1 text-white fs-14">Main Balance</p>
+                    <div class="d-flex justify-content-center">
+                      <h2 class="num-text text-white mb-5 font-w600">
+                        가게홍보게시판
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--**********************************            Footer start        ***********************************-->
+    {% include 'footer.html' %}
+    <!--**********************************            Footer end        ***********************************-->
+  </div>
+  <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+  <!--**********************************        Scripts    ***********************************-->
+  <!-- Required vendors -->
+  <script src="/static/vendor/global/global.min.js"></script>
+  <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+  <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+
+  <!-- Chart piety plugin files 
+    <script src="/static/vendor/peity/jquery.peity.min.js"></script>
+
+     Apex Chart 
+    <script src="/static/vendor/apexchart/apexchart.js"></script>
+
+     Dashboard 1 
+    <script src="/static/js/dashboard/dashboard-1.js"></script>
+    -->
+  <script src="/static/vendor/owl-carousel/owl.carousel.js"></script>
+  <script src="/static/js/custom.min.js"></script>
+  <script src="/static/js/deznav-init.js"></script>
+</body>
+
+</html>

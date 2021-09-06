@@ -1,0 +1,996 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>채팅방</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png">
+    <link href="/static/vendor/lightgallery/css/lightgallery.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/vendor/chartist/css/chartist.min.css">
+    <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="/static/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <!-- <link href="/static/css/map.css" rel="stylesheet"> -->
+    <script src='http://code.jquery.com/jquery-3.1.1.min.js'></script>
+    <style>
+        body {
+            -ms-user-select: none;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .audio_icon {
+            cursor: pointer;
+        }
+
+        .chatbox {
+            width: 40%;
+            right: -40%;
+        }
+
+        .chatbox .chatbox-close {
+            right: 40%;
+
+        }
+
+        #audio-box {
+            float: left
+        }
+
+        #sound-clips {
+            float: right
+        }
+
+        .clip {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        #container {
+            overflow: hidden;
+            height: 710px;
+            /* position: relative; */
+            top: 80px;
+        }
+
+        #mapWrapper {
+            width: 30%;
+            height: 300px;
+            position: absolute;
+            z-index: 3;
+        }
+
+        #rvWrapper {
+            width: 100%;
+            height: 710px;
+            top: 0;
+            right: 0;
+            position: absolute;
+            z-index: 0;
+        }
+
+        #container.view_roadview #mapWrapper {
+            width: 50%;
+        }
+
+        #music-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+
+        footer {
+            position: fixed;
+            bottom: 2px;
+            width: 100%;
+        }
+
+        /* #roadviewControl {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 42px;
+            height: 42px;
+            z-index: 1;
+            cursor: pointer;
+            background: url(https://t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) 0 -450px no-repeat;
+        } */
+
+        /* #roadviewControl.active {
+            background-position: 0 -350px;
+        } */
+
+        #close_map {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .btn-xs#forest {
+            background-color: #0e5e0b;
+            border-color: #0e5e0b;
+            height: 80%;
+            text-align: center;
+        }
+
+        .btn-xs#beach {
+            display: flex;
+            background-color: #0041b9;
+            border-color: #0041b9;
+            height: 80%;
+        }
+
+        .btn-xs#city {
+            background-color: #410266;
+            border-color: #410266;
+            height: 80%;
+        }
+
+        .isvisible {
+            visibility: hidden;
+        }
+
+        .current_nick {
+            color: black;
+            font-style: black;
+        }
+    </style>
+</head>
+
+<body style="margin: 0mm;">
+    <!--**********************************
+            Chat box start
+        ***********************************-->
+    <div class="chatbox" style="background-color: rgba( 255, 255, 255, 0.0 );">
+        <div class="chatbox-close" style="visibility: hidden;"></div>
+        <div class="custom-tab-1" ;>
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="chat" role="tabpanel">
+                    <div class="card mb-sm-3 mb-md-0 contacts_card dz-chat-user-box"
+                        style="background-color: rgba( 255, 255, 255, 0.2 );">
+                        <div class="card-header chat-list-header text-center"
+                            style="background-color: rgba( 255, 255, 255, 1 );">
+                            {% comment %} 뒤로가기 버튼 기능 {% endcomment %}
+                            <a class="아무거나입력">
+                                <div class="chatbox-close2" style="cursor: pointer;">
+                                    ➜
+                                </div>
+                            </a>
+                            <div>
+                                <h6 class="mb-1" id="input_room_name">채팅방</h6>
+                                <p class="mb-0 text-success" id='chat_room_num'></p>
+                            </div>
+                            <div class="dropdown" style="cursor: pointer;">
+                                <a data-toggle="dropdown" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <rect x="0" y="0" width="24" height="24" />
+                                            <circle fill="#000000" cx="5" cy="12" r="2" />
+                                            <circle fill="#000000" cx="12" cy="12" r="2" />
+                                            <circle fill="#000000" cx="19" cy="12" r="2" />
+                                        </g>
+                                    </svg></a>
+                                <ul class="dropdown-menu dropdown-menu-right" id="user_list">
+                                    <div style="text-align:center;"><b>참가자 목록</b></div>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body msg_card_body dz-scroll" id="chat-log">
+                            <div class="d-flex justify-content-start mb-4">
+                                <div class="img_cont_msg">
+                                    <img src="/static/images/avatar/logo_AR라봉.png" class="rounded-circle user_img_msg"
+                                        alt="" />
+                                </div>
+                                <div>
+                                    <div>&nbsp;AR라봉</div>
+                                    <div class="msg_cotainer">{{request.session.user_name}}님 채팅을 시작하세요!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer type_msg" style="background-color: rgba( 255, 255, 255, 1 );">
+                            <div class="input-group">
+                                <textarea id="chat-message-input" class="form-control" placeholder="입력하세요..."
+                                    style="border-radius: 15px;"></textarea>&nbsp;
+                                <div class="input-group-append">
+                                    <button id="chat-message-submit" type="button" class="btn btn-primary"><i
+                                            class="fa fa-location-arrow"></i></button>
+                                    <button id="send" style="display: none;">녹음 파일 전송</button>
+                                </div>
+                            </div>
+
+                            <div id="audio-box">
+                                <span><span id="message_limit">(0 / 1000)</span></span>
+                                <button id="record" class="btn light btn-warning">녹음</button>
+                                <button id="stop" class="btn light btn-warning">정지</button>&nbsp;
+
+                                <p id="sound-clips"></p>
+                            </div>
+                            <audio id='play' style='display: none;'></audio>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--**********************************
+            Chat box End
+        ***********************************-->
+    <!--**********************************
+            Header start
+        ***********************************-->
+    <div class="badge badge-dark" id="close_map">o</div>
+    <div class="header" style="background-color: rgba( 255, 255, 255, 0.0 ); width: 50%; left: 50%;">
+        <div class="header-content">
+            <nav class="navbar navbar-expand">
+                <div class="collapse navbar-collapse justify-content-between">
+                    <div class="header-left">
+                    </div>
+                </div>
+                <ul class="navbar-nav header-right main-notification" id="main-notification">
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-toggle="dropdown">
+                            🎧
+                        </a>
+                        <div class="dropdown-menu dropdown-menu">
+                            <div id="dlab_W_Notification1" class="widget-media dz-scroll"
+                                style="padding: 0%; width: auto; height: auto;">
+                                <ul class="timeline" style="text-align: center; width: 230px;">
+                                    <div>
+                                        <span class="badge light badge-info">
+                                            바다
+                                        </span>
+                                        <span class="media-body">
+                                            <embed
+                                                src="http://www.youtube.com/v/zp789sRyQKg?version=3&autohide=0&showinfo=0&autoplay=0&playlist=zp789sRyQKg&hl=ko_KR&rel=0"
+                                                type="application/x-shockwave-flash" width="350" height="25"
+                                                allowscriptaccess="always" allowfullscreen="true">
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="badge light badge-success">
+                                            숲속
+                                        </span>
+                                        <span class="media-body">
+                                            <embed
+                                                src="http://www.youtube.com/v/zp789sRyQKg?version=3&autohide=0&showinfo=0&autoplay=0&playlist=GjeaMjQI_dk&hl=ko_KR&rel=0"
+                                                type="application/x-shockwave-flash" width="350" height="25"
+                                                allowscriptaccess="always" allowfullscreen="true">
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="badge light badge-danger">
+                                            도심
+                                        </span>
+                                        <span class="media-body">
+                                            <embed
+                                                src="http://www.youtube.com/v/zp789sRyQKg?version=3&autohide=0&showinfo=0&autoplay=0&playlist=GjeaMjQI_dk&hl=ko_KR&rel=0"
+                                                type="application/x-shockwave-flash" width="350" height="25"
+                                                allowscriptaccess="always" allowfullscreen="true">
+                                        </span>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-toggle="dropdown"
+                            id="photo">
+                            📷
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link bell bell-link" href="javascript:void(0)" id="chat-notification">
+                            💬
+                            <span class="badge light text-white bg-primary rounded-circle" id="badge_alert"></span>
+                        </a>
+                    </li>
+                </ul>
+
+        </div>
+        </nav>
+    </div>
+    </div>
+    <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+    <div id="container" style="height: 100%;">
+        <div id="rvWrapper" style="height: 100vh;">
+            <div id="roadview" style="width:100%;height:100%;"></div> <!-- 로드뷰를 표시할 div 입니다 -->
+            <!-- <div id="close" title="로드뷰닫기" onclick="closeRoadview()"><span class="img"></span></div> -->
+        </div>
+        <div id="mapWrapper" class="">
+            <div id="map" style="width:100%;height:100%;"></div> <!-- 지도를 표시할 div 입니다 -->
+            <!-- <div id="roadviewControl" onclick="setRoadviewRoad()"></div> -->
+        </div>
+    </div>
+
+    {{ room_name|json_script:"room-name" }}
+</body>
+<footer>
+    <div class="header-left" style="height: 70%;" id="image_bar">
+        <div class="row mt-4 sp4" id="lightgallery">
+            <a href="/static/images/lightgallery/9.81파크.jpg" data-exthumbimage="/static/images/lightgallery/9.81파크.jpg"
+                data-src="/static/images/lightgallery/9.81파크.jpg" class="mb-1 col-lg-1 col-xl-1 col-sm-1 col-1">
+                <img src="/static/images/lightgallery/9.81파크.jpg" alt="" class="img-fluid">
+            </a>
+            <a href="/static/images/lightgallery/공산명월.jpg" data-exthumbimage="/static/images/lightgallery/공산명월.jpg"
+                data-src="/static/images/lightgallery/공산명월.jpg" class="mb-1 col-lg-1 col-xl-1 col-sm-1 col-1">
+                <img src="/static/images/lightgallery/공산명월.jpg" alt="" class="img-fluid">
+            </a>
+            <a href="/static/images/lightgallery/드라마2015.jpg" data-exthumbimage="/static/images/lightgallery/드라마2015.jpg"
+                data-src="/static/images/lightgallery/드라마2015.jpg" class="mb-1 col-lg-1 col-xl-1 col-sm-1 col-1">
+                <img src="/static/images/lightgallery/드라마2015.jpg" alt="" class="img-fluid">
+            </a>
+            <a href="/static/images/lightgallery/우아한 보말.jpg" data-exthumbimage="/static/images/lightgallery/우아한 보말.jpg"
+                data-src="/static/images/lightgallery/우아한 보말.jpg" class="mb-1 col-lg-1 col-xl-1 col-sm-1 col-1">
+                <img src="/static/images/lightgallery/우아한 보말.jpg" alt="" class="img-fluid">
+            </a>
+            <a href="/static/images/lightgallery/코시롱.jpg" data-exthumbimage="/static/images/lightgallery/코시롱.jpg"
+                data-src="/static/images/lightgallery/코시롱.jpg" class="mb-1 col-lg-1 col-xl-1 col-sm-1 col-1">
+                <img src="/static/images/lightgallery/코시롱.jpg" alt="" class="img-fluid">
+            </a>
+            <a href="/static/images/lightgallery/크랩잭.jpg" data-exthumbimage="/static/images/lightgallery/크랩잭.jpg"
+                data-src="/static/images/lightgallery/크랩잭.jpg" class="mb-1 col-lg-1 col-xl-1 col-sm-1 col-1">
+                <img src="/static/images/lightgallery/크랩잭.jpg" alt="" class="img-fluid">
+            </a>
+        </div>
+    </div>
+</footer>
+<script>
+    $(document).ready(function () {
+        // 글자 수 세기
+        $('#chat-message-input').on('keyup', function () {
+            $('#message_limit').html("(" + $(this).val().length + " / 1000)");
+
+            if ($(this).val().length > 1000) {
+                $(this).val($(this).val().substring(0, 1000));
+                $('#message_limit').html("(1000 / 1000)");
+            }
+        });
+        //
+    });
+    $("#close_map").on("click", function () {
+        $("#mapWrapper").slideToggle("fast");
+    });
+    $("#chat-notification").on("click", function () {
+        if (!$('#main-notification').hasClass('isvisible')) {
+            $('#main-notification').addClass('isvisible');
+        }
+    });
+    $(".chatbox-close2").on("click", function () {
+        if ($('#main-notification').hasClass('isvisible')) {
+            $('#main-notification').removeClass('isvisible');
+        }
+    });
+    $("#photo").on("click", function () {
+        $("#image_bar").slideToggle("fast");
+    });
+</script>
+
+<script>
+    const username = `{{ request.session.user_name }}`;
+    // console.log(username);
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+        + roomName
+        + '/'
+    );
+    //스크롤 이동 변수
+    var scroll_num = 0;
+    //
+    var user_login = 'log-in';
+    var user_logout = 'log-out';
+    var islogin = 0;
+    var user_enter = 'user_enter';
+    // 메시지 알림 함수
+    var alert_num = 0;
+    var user_count = 0;
+    function clock() {
+        if ($('.chatbox').hasClass('active')) {
+            alert_num = 0;
+            document.querySelector('#chat-message-input').focus();
+        }
+        $('#badge_alert').html(alert_num);
+        // 채팅 유저 목록 갱신
+        if (!document.getElementById("user" + username)) {
+            if (islogin < 2) {
+                islogin += 1;
+            } else {
+                chatSocket.send(JSON.stringify({
+                    'message': `[${username}]${user_login}`
+                }));
+                chatSocket.send(JSON.stringify({
+                    'message': `[${username}]${user_enter}`
+                }));
+            }
+        }
+        $('#chat_room_num').html("참여자 수 : " + (document.getElementById('user_list').childElementCount - 1));
+        user_count = document.getElementById('user_list').childElementCount - 1;
+        $.ajax({
+            url: `/board/map/`,
+            data: {
+                roomname: document.getElementById('input_room_name').innerHTML,
+                roomUrl: roomName,
+                userCount: user_count
+            },
+        });
+        // Model <- count field user_count 갱신.
+        // 
+    }
+    setInterval(clock, 1000);
+    // 
+    $(window).on("beforeunload", function () {
+        chatSocket.send(JSON.stringify({
+            'message': `[${username}]${user_logout}`
+        }));
+        islogin = 0;
+    });
+
+
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        var now = new Date();
+        if (now.getHours() > 12) {
+            var now_time = now.getMonth() + '월 ' + now.getDate() + '일 ' + '오후 ' + (now.getHours() - 12) + '시 ' + now.getMinutes() + '분';
+        } else {
+            var now_time = now.getMonth() + '월 ' + now.getDate() + '일 ' + '오전 ' + now.getHours() + '시 ' + now.getMinutes() + '분';
+        }
+        // 개선된 닉네임 추출 방법
+        if (data.message) {
+            let nick = data.message;
+            let sIdx = 0;
+            let eIdx = nick.indexOf(']');
+            var current_nick = nick.substring(sIdx + 1, eIdx);
+            data.message = nick.substring(eIdx + 1,);
+            var chat_data = data.message;
+        } else {
+            let nick = data.path;
+            let sIdx = 0;
+            let eIdx = nick.indexOf(']');
+            var current_nick = nick.substring(sIdx + 1, eIdx);
+            data.path = nick.substring(eIdx + 1,);
+            let html = `<span class='audio_icon' id=${data.path} style="color:green;"><img src="/static/images/avatar/audio.png" width="40" height="40">&nbsp&nbsp음성메시지</span>`;
+            // document.querySelector('#chat-log').innerHTML += (html + '<br>');
+            var chat_data = html;
+        }
+        if (chat_data == user_login) {
+            if (!document.getElementById("user" + current_nick)) {
+                document.querySelector('#user_list').innerHTML += (`<li class="dropdown-item" id="user${current_nick}"><i class="fa fa-user-circle text-primary mr-2"></i>
+                                        <b class="current_nick">${current_nick}</b></li>`);
+                chatSocket.send(JSON.stringify({
+                    'message': `[${username}]${user_login}`
+                }));
+            }
+        } else if (chat_data == user_logout) {
+            if (document.getElementById("user" + current_nick)) {
+                $("#user" + current_nick).remove();
+                document.querySelector('#chat-log').innerHTML += (`<div style="text-align: center;"><div class="badge badge-dark">
+                    ${current_nick}님이 퇴장하셨습니다.</div></div><br>`);
+            }
+        } else if (chat_data == user_enter) {
+            document.querySelector('#chat-log').innerHTML += (`<div style="text-align: center;"><div class="badge badge-dark">
+                    ${current_nick}님이 입장하셨습니다.</div></div><br>`);
+        } else {
+            alert_num += 1;
+            if (alert_num > 99) { alert_num = '**'; }
+            if (current_nick !== username) {
+                // document.querySelector('#chat-log').value += (chat_data + '\n');
+                document.querySelector('#chat-log').innerHTML += (`<div class="d-flex justify-content-start mb-4">\
+                <div class="img_cont_msg">\
+                    <img src="/static/images/profile/${current_nick}.png" onerror="this.src='/static/images/profile/port.jpg'" class="rounded-circle user_img_msg" />\
+                    </div>\
+                    <div>\
+                    <div>&nbsp;${current_nick}</div>\
+                    <div class="msg_cotainer">${chat_data}\
+                <span class="msg_time">${now_time}</span></div>\
+                        </div>\
+                        </div>`);
+            } else {
+                document.querySelector('#chat-log').innerHTML += (`<div class="d-flex justify-content-end mb-4">\
+                <div class="msg_cotainer_send" style="word-break:break-all;">${chat_data}\
+                    <span class="msg_time_send">${now_time}</span>\
+                        </div>\
+                        <div class="img_cont_msg">\
+                            <img src="/static/images/profile/${current_nick}.png" onerror="this.src='/static/images/profile/port.jpg'" class="rounded-circle user_img_msg" />\
+                        </div>\
+                    </div>`);
+
+            }
+            $('#message_limit').html("(0 / 1000)");
+        }
+        // 애니메이션 자동포커스
+        var prev_scroll_num = scroll_num;
+        scroll_num += 3000;
+        $("#chat-log").scrollTop(scroll_num);
+        scroll_num = $("#chat-log").scrollTop();
+        $("#chat-log").scrollTop(prev_scroll_num);
+        $("#chat-log").animate({ scrollTop: `${scroll_num}` }, 300);
+        // console.log(scroll_num);
+        // 
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function (e) {
+        if (e.keyCode === 13) {  // enter, return
+            if (document.querySelector('#chat-message-input').value.length > 0) {
+                document.querySelector('#chat-message-input').value = document.querySelector('#chat-message-input').value.substring(0, document.querySelector('#chat-message-input').value.length - 1);
+            }
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    const record = document.getElementById("record")
+    const stop = document.getElementById("stop")
+    const send = document.getElementById("chat-message-submit")
+    const soundClips = document.getElementById("sound-clips")
+    const chkHearMic = document.getElementById("chk-hear-mic")
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)() // 오디오 컨텍스트 정의
+    let blob;
+    let audioURL;
+    const analyser = audioCtx.createAnalyser()
+    //        const distortion = audioCtx.createWaveShaper()
+    //        const gainNode = audioCtx.createGain()
+    //        const biquadFilter = audioCtx.createBiquadFilter()
+
+    function makeSound(stream) {
+        const source = audioCtx.createMediaStreamSource(stream)
+
+        source.connect(analyser)
+        //            analyser.connect(distortion)
+        //            distortion.connect(biquadFilter)
+        //            biquadFilter.connect(gainNode)
+        //            gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
+        analyser.connect(audioCtx.destination)
+
+    }
+    console.log(navigator.mediaDevices);
+    if (navigator.mediaDevices) {
+        // console.log('getUserMedia supported.')
+
+        const constraints = {
+            audio: true
+        }
+        let chunks = []
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+
+                const mediaRecorder = new MediaRecorder(stream)
+
+                // chkHearMic.onchange = e => {
+                //     if (e.target.checked == true) {
+                //         audioCtx.resume()
+                //         makeSound(stream)
+                //     } else {
+                //         audioCtx.suspend()
+                //     }
+                // }
+
+                record.onclick = () => {
+                    audioCtx.suspend()
+                    mediaRecorder.start()
+                    // console.log(mediaRecorder.state)
+                    // console.log("recorder started")
+                    record.style.background = "red"
+                    record.style.color = "black"
+                    if (soundClips.firstChild) {
+                        soundClips.removeChild(soundClips.firstChild)
+                    }
+
+                }
+
+                stop.onclick = () => {
+
+                    mediaRecorder.stop()
+                    // console.log(mediaRecorder.state)
+                    // console.log("recorder stopped")
+                    record.style.background = ""
+                    record.style.color = ""
+                    document.querySelector('#chat-message-input').focus();
+                }
+
+                mediaRecorder.onstop = e => {
+                    // console.log("data available after MediaRecorder.stop() called.")
+
+                    // const clipName = new Date()
+                    const clipContainer = document.createElement('article')
+                    // const clipLabel = document.createElement('p')
+                    const audio = document.createElement('audio')
+                    const deleteButton = document.createElement('button')
+
+                    clipContainer.classList.add('clip')
+                    deleteButton.classList.add('btn-warning')
+                    deleteButton.classList.add('btn')
+                    deleteButton.classList.add('light')
+                    audio.setAttribute('controls', '')
+                    deleteButton.innerHTML = "삭제"
+                    // clipLabel.innerHTML = clipName
+
+                    clipContainer.appendChild(audio)
+                    // clipContainer.innerHTML += "&nbsp"
+                    // clipContainer.appendChild(clipLabel)
+                    clipContainer.appendChild(deleteButton)
+                    soundClips.appendChild(clipContainer)
+
+                    audio.controls = true
+                    blob = new Blob(chunks, {
+                        'type': 'audio/ogg codecs=opus'
+                    })
+                    chunks = []
+                    audioURL = URL.createObjectURL(blob)
+                    audio.src = audioURL
+                    // console.log("recorder stopped")
+
+                    deleteButton.onclick = e => {
+                        soundClips.removeChild(soundClips.firstChild);
+                        blob = null;
+                    }
+                }
+
+                // 녹음된 내용을 서버로 전송하는 기능
+                send.onclick = () => {
+                    if (blob) {
+                        const formData = new FormData();
+                        formData.append('blob', blob);
+                        // console.log('blob가 있습니다.');
+
+                        $.ajax({
+                            url: '/chat/room/',
+                            type: 'post',
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            success: function (res) {
+                                // console.log(res.path);
+                                // 저장된 파일명을 받은 후 채팅하듯이 파일명을 다시 전송
+                                chatSocket.send(JSON.stringify({
+                                    'path': `[${username}]${res.path}`
+                                }));
+                            }
+                        })
+                        // console.log(soundClips.childNodes);
+                        soundClips.removeChild(soundClips.firstChild)
+                        blob = null;
+                    }
+                    if (document.querySelector('#chat-message-input').value !== "") {
+                        // console.log('녹음파일이 없습니다.');
+                        const messageInputDom = document.querySelector('#chat-message-input');
+                        const message = messageInputDom.value;
+                        chatSocket.send(JSON.stringify({
+                            'message': `[${username}]${message}`
+                        }));
+                        messageInputDom.value = '';
+                    }
+                }
+
+                mediaRecorder.ondataavailable = e => {
+                    chunks.push(e.data)
+                }
+            })
+            .catch(err => {
+                console.log('The following error occurred: ' + err)
+            })
+    }
+</script>
+<script>
+    // const obj = {};
+    let isPlaying = false;
+    document.querySelector('#play').onpause = function () {
+        isPlaying = false;
+    };
+
+    // audiolist = [];
+    $('body').on('click', '.audio_icon', function () {
+        const src = $(this).attr("id");
+        // const audiopath=audiolist.push(src)
+        $('#play').attr('src', src);
+        togglePause(document.querySelector('#play'))
+        // console.log(audiopath)
+    });
+
+    function togglePause(myAudio) {
+        if (!isPlaying) {
+            myAudio.play();
+            isPlaying = true;
+        } else {
+            myAudio.pause();
+            isPlaying = false;
+        }
+    }
+</script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b07e3a88682339b75d81a2cd6b1e1478"></script>
+<script>
+    var overlayOn = true, // 지도 위에 로드뷰 오버레이가 추가된 상태를 가지고 있을 변수
+        container = document.getElementById('container'), // 지도와 로드뷰를 감싸고 있는 div 입니다
+        mapWrapper = document.getElementById('mapWrapper'), // 지도를 감싸고 있는 div 입니다
+        mapContainer = document.getElementById('map'), // 지도를 표시할 div 입니다 
+        rvContainer = document.getElementById('roadview'); //로드뷰를 표시할 div 입니다
+
+    var mapCenter = new kakao.maps.LatLng(33.467427, 126.3293), // 지도의 중심좌표
+        mapOption = {
+            center: mapCenter, // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 표시할 div와 지도 옵션으로 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 로드뷰 객체를 생성합니다 
+    var rv = new kakao.maps.Roadview(rvContainer);
+
+    // 좌표로부터 로드뷰 파노라마 ID를 가져올 로드뷰 클라이언트 객체를 생성합니다 
+    var rvClient = new kakao.maps.RoadviewClient();
+
+    // 로드뷰에 좌표가 바뀌었을 때 발생하는 이벤트를 등록합니다 
+    kakao.maps.event.addListener(rv, 'position_changed', function () {
+
+        // 현재 로드뷰의 위치 좌표를 얻어옵니다 
+        var rvPosition = rv.getPosition();
+
+        // 지도의 중심을 현재 로드뷰의 위치로 설정합니다
+        map.setCenter(rvPosition);
+
+        // 지도 위에 로드뷰 도로 오버레이가 추가된 상태이면
+        if (overlayOn) {
+            // 마커의 위치를 현재 로드뷰의 위치로 설정합니다
+            marker.setPosition(rvPosition);
+        }
+    });
+
+    // 마커 이미지를 생성합니다
+    var markImage = new kakao.maps.MarkerImage(
+        'https://t1.daumcdn.net/localimg/localimages/07/2018/pc/roadview_minimap_wk_2018.png',
+        new kakao.maps.Size(26, 46),
+        {
+            // 스프라이트 이미지를 사용합니다.
+            // 스프라이트 이미지 전체의 크기를 지정하고
+            spriteSize: new kakao.maps.Size(1666, 168),
+            // 사용하고 싶은 영역의 좌상단 좌표를 입력합니다.
+            // background-position으로 지정하는 값이며 부호는 반대입니다.
+            spriteOrigin: new kakao.maps.Point(705, 114),
+            offset: new kakao.maps.Point(13, 46)
+        }
+    );
+
+    // 드래그가 가능한 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+        image: markImage,
+        position: mapCenter,
+        draggable: true
+    });
+
+    // 마커에 dragend 이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent) {
+
+        // 현재 마커가 놓인 자리의 좌표입니다 
+        var position = marker.getPosition();
+
+        // 마커가 놓인 위치를 기준으로 로드뷰를 설정합니다
+        toggleRoadview(position);
+    });
+
+    //지도에 클릭 이벤트를 등록합니다
+    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+
+        // 지도 위에 로드뷰 도로 오버레이가 추가된 상태가 아니면 클릭이벤트를 무시합니다 
+        if (!overlayOn) {
+            return;
+        }
+
+        // 클릭한 위치의 좌표입니다 
+        var position = mouseEvent.latLng;
+        // 마커를 클릭한 위치로 옮깁니다
+        marker.setPosition(position);
+
+        // 클락한 위치를 기준으로 로드뷰를 설정합니다
+        toggleRoadview(position);
+    });
+
+    // 전달받은 좌표(position)에 가까운 로드뷰의 파노라마 ID를 추출하여
+    // 로드뷰를 설정하는 함수입니다
+    function toggleRoadview(position) {
+        rvClient.getNearestPanoId(position, 50, function (panoId) {
+            // 파노라마 ID가 null 이면 로드뷰를 숨깁니다
+            if (panoId !== null) {
+                toggleMapWrapper(false, position);
+                // panoId로 로드뷰를 설정합니다
+                rv.setPanoId(panoId, position);
+            }
+        });
+    }
+
+    // 지도를 감싸고 있는 div의 크기를 조정하는 함수입니다
+    function toggleMapWrapper(active, position) {
+        if (active) {
+
+            // 지도를 감싸고 있는 div의 너비가 100%가 되도록 class를 변경합니다 
+            container.className = '';
+
+            // 지도의 크기가 변경되었기 때문에 relayout 함수를 호출합니다
+            map.relayout();
+
+            // 지도의 너비가 변경될 때 지도중심을 입력받은 위치(position)로 설정합니다
+            map.setCenter(position);
+            // } else {
+
+            //     // 지도만 보여지고 있는 상태이면 지도의 너비가 50%가 되도록 class를 변경하여
+            //     // 로드뷰가 함께 표시되게 합니다
+            //     if (container.className.indexOf('view_roadview') === -1) {
+            //         container.className = 'view_roadview';
+
+            //         // 지도의 크기가 변경되었기 때문에 relayout 함수를 호출합니다
+            //         map.relayout();
+
+            //         // 지도의 너비가 변경될 때 지도중심을 입력받은 위치(position)로 설정합니다
+            //         map.setCenter(position);
+            //     }
+        }
+    }
+
+    // 지도 위의 로드뷰 도로 오버레이를 추가,제거하는 함수입니다
+    map.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+
+    // 지도 위에 마커를 표시합니다
+    marker.setMap(map);
+
+    // 마커의 위치를 지도 중심으로 설정합니다 
+    marker.setPosition(map.getCenter());
+
+    // 로드뷰의 위치를 지도 중심으로 설정합니다
+    toggleRoadview(map.getCenter());
+    function toggleOverlay(active) {
+        if (active) {
+            overlayOn = true;
+
+            // 지도 위에 로드뷰 도로 오버레이를 추가합니다
+            map.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+
+            // 지도 위에 마커를 표시합니다
+            marker.setMap(map);
+
+            // 마커의 위치를 지도 중심으로 설정합니다 
+            marker.setPosition(map.getCenter());
+
+            // 로드뷰의 위치를 지도 중심으로 설정합니다
+            toggleRoadview(map.getCenter());
+        }
+    }
+    //     } else {
+    //         overlayOn = false;
+
+    //         // 지도 위의 로드뷰 도로 오버레이를 제거합니다
+    //         map.removeOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+
+    //         // 지도 위의 마커를 제거합니다
+    //         marker.setMap(null);
+    //     }
+    // }
+
+    // 지도 위의 로드뷰 버튼을 눌렀을 때 호출되는 함수입니다
+    // function setRoadviewRoad() {
+    //     var control = document.getElementById('roadviewControl');
+
+    //     // 버튼이 눌린 상태가 아니면
+    //     if (control.className.indexOf('active') === -1) {
+    //         control.className = 'active';
+
+    //         // 로드뷰 도로 오버레이가 보이게 합니다
+    //         toggleOverlay(true);
+    //     } else {
+    //         control.className = '';
+
+    //         // 로드뷰 도로 오버레이를 제거합니다
+    //         toggleOverlay(false);
+    //     }
+    // }
+
+    // 로드뷰에서 X버튼을 눌렀을 때 로드뷰를 지도 뒤로 숨기는 함수입니다
+    // function closeRoadview() {
+    //     var position = marker.getPosition();
+    //     toggleMapWrapper(true, position);
+    // }
+
+    function addMarker(position) {
+        //var iwContent = '<input placeholder="채팅방제목입력" style="padding:5px;"> </input>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+        //    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+        var infowindow = new kakao.maps.InfoWindow({
+            content: `<a href="../../chat/${charToUnicode(chat_title).replace(/\\/g, "")}">${chat_title}</a>`,
+            removable: true,
+        });
+
+        var imageSrc = '/static/images/map_pin.png', // 마커이미지의 주소입니다    
+            imageSize = new kakao.maps.Size(30, 32), // 마커이미지의 크기입니다
+            imageOption = { offset: new kakao.maps.Point(15, 32) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+        var marker = new kakao.maps.Marker({
+            position: position,
+            image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption) //마커이미지 설정
+            //clickable: true
+        });
+        marker.setMap(map); // 마커가 지도 위에 표시되도록 설정합니다
+        //console.log(marker)
+        kakao.maps.event.addListener(marker, "click", function () {
+            // 마커 위에 인포윈도우를 표시합니다
+            infowindow.open(map, marker);
+        });
+    }
+    //************************************ 인포윈도우 ************
+
+    function charToUnicode(str) {
+        if (!str) return false;
+        var unicode = '';
+        for (var i = 0, j = str.length; i < j; i++) {
+            unicode += '\\' + str[i].charCodeAt(0).toString(16);
+        };
+        return unicode;
+    }
+
+    var first_mapflag = 0;
+    // 지도 로딩 후 채팅방 데이터 목록 조회
+    kakao.maps.event.addListener(
+        map,
+        "tilesloaded",
+        function (mouseEvent) {
+            $.ajax({
+                url: "/board/map_data/",
+                success: function (res) {
+                    for (const item of res) {
+                        let position = new kakao.maps.LatLng(item.lat, item.lng);
+                        chat_title = item.title;
+                        addMarker(position);
+                        if (charToUnicode(chat_title).replace(/\\/g, "") == roomName) {
+                            if (first_mapflag < 3) {
+                                if (!overlayOn) {
+                                    return;
+                                }
+                                console.log(roomName);
+                                $('#input_room_name').html(chat_title);
+                                first_mapflag = first_mapflag + 1;
+                                map.setCenter(position);
+                                marker.setPosition(map.getCenter());
+                                toggleRoadview(map.getCenter());
+                            }
+                        }
+                    }
+                },
+            });
+        }
+    );
+
+
+</script>
+
+
+<script src="/static/vendor/global/global.min.js"></script>
+<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="/static/vendor/owl-carousel/owl.carousel.js"></script>
+<script src="/static/vendor/lightgallery/js/lightgallery-all.min.js"></script>
+<!-- 커스텀 스크립트 (자동포커스)-->
+<script src="/static/js/custom.js"></script>
+<!--  -->
+<script src="/static/js/deznav-init.js"></script>
+
+</html>

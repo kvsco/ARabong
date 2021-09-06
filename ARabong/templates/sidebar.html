@@ -1,0 +1,75 @@
+{% load static %}
+<div class="deznav">
+      <div class="deznav-scroll">
+        <div class="main-profile">
+         {% if request.session.user_name %}
+          <img src="/static/images/profile/{{request.session.user_name}}.png" onerror="this.src='/static/images/profile/port.jpg'" />
+          <a href="/firstapp/app_profile"><i class="fa fa-cog" aria-hidden="true"></i></a>
+          <h5 class="mb-0 fs-20 text-black">
+            <span class="font-w400">{{request.session.user_name}} 님</span> 
+          </h5>
+          <p class="mb-0 fs-14 font-w400">안녕하세요</p>
+          <a href="../../../firstapp/sign_out/">로그아웃</a>
+          {% else %}
+          <img src="/static/images/Untitled-1.jpg" alt="" />
+          <a href="/firstapp/app_profile"><i class="fa fa-cog" aria-hidden="true"></i></a>
+          <h5 class="mb-0 fs-20 text-black">
+            <span class="font-w400">[회원정보없음]</span><br>
+            <a href="../../member/page_login/">로그인하기</a>
+          </h5>
+          {% endif %}
+        </div>
+        <ul class="metismenu" id="menu">
+          <li>
+            <a class="has-arrow ai-icon" href="../../../board/map/" aria-expanded="false">
+              <i class="flaticon-144-layout"></i>
+              <span class="nav-text">지도 둘러보기</span>
+            </a>
+          </li>
+          <li>
+            <a class="has-arrow ai-icon" href="../../../board/promise/" aria-expanded="false">
+              <i class="flaticon-053-heart"></i>
+              <span class="nav-text">약속 게시판</span>
+            </a>
+          </li>
+          <li>
+            <a class="has-arrow ai-icon" href="../../../board/news/" aria-expanded="false">
+              <i class="flaticon-044-file"></i>
+              <span class="nav-text">뉴스 게시판</span>
+            </a>
+          </li>
+          </li>
+          <li>
+            <a class="has-arrow ai-icon" href="../../../board/board_list/" aria-expanded="false">
+              <i class="flaticon-061-puzzle"></i>
+              <span class="nav-text">익명 게시판</span>
+            </a>
+            {% comment %} <ul aria-expanded="false">
+              <li><a href="남자.html">남자들 이야기</a></li>
+              <li><a href="여자.html">여자들 이야기</a></li>
+            </ul> {% endcomment %}
+          </li>
+          <li>
+            <a class="has-arrow ai-icon" href="../../../board/promotion/" aria-expanded="false">
+              <i class="flaticon-003-diamond"></i>
+              <span class="nav-text">가게홍보 게시판</span>
+            </a>
+          </li>
+          <li>
+            <a href="../../../board/help/" class="ai-icon" aria-expanded="false">
+              <i class="flaticon-381-settings-2"></i>
+              <span class="nav-text">도움말</span>
+            </a>
+          </li>
+        </ul>
+        <div class="copyright">
+          <p>
+            <strong>KFQ AI programmers project</strong>
+            © 2021
+          </p>
+          <p class="fs-12">
+            Made with <span class="heart"></span> by 3조 프로젝트
+          </p>
+        </div>
+      </div>
+    </div>

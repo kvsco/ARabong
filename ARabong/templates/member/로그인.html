@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AR라봉 로그인</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static './images/favicon.png'%}">
+    <link href="{% static './vendor/bootstrap-select/dist/css/bootstrap-select.min.css'%}" rel="stylesheet">
+    <link href="{% static './css/style.css'%}" rel="stylesheet">
+</head>
+
+<body class="vh-100">
+    <div class="authincation h-100">
+        <div class="container h-100">
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-md-6">
+                    <div class="authincation-content">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12">
+                                <div class="auth-form">
+                                    <div class="text-center mb-3">
+                                        {% for message in messages %}
+                                        <div class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center"
+                                            role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            {{ message }}
+                                        </div>
+                                        {% endfor %}
+                                        <script>
+                                            window.setTimeout(function () {
+                                                $(".alert-auto-dismissible")
+                                                    .fadeTo(500, 0)
+                                                    .slideUp(500, function () {
+                                                        $(this).remove();
+                                                    });
+                                            }, 2000);
+                                        </script>
+                                        <img src="{% static 'images/logo.png'%}" style="max-width: 50%; height: auto;">
+                                        <div class="text-center"><img src="{% static 'images/네임.png'%}"
+                                                style="max-width: 50%; height: auto;"></div>
+                                    </div>
+
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label class="mb-1"><strong>ID</strong></label>
+                                            <input type="text" class="form-control" value="" name="user_id" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1"><strong>Password</strong></label>
+                                            <input type="password" class="form-control" value="" name="user_pw"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox mb-3">
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="basic_checkbox_1">
+                                                <label class="custom-control-label" for="basic_checkbox_1">로그인 상태
+                                                    유지</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <a href="../../member/forgot_password/">비밀번호를 잊어버리셨나요?</a>
+                                        </div>
+                                        <div class="text-center">
+                                            <input type="submit" class="btn btn-primary btn-block"
+                                                style="font-size:20px;" value="로그인"></button>
+                                        </div>
+                                    </form>
+                                    <div class="new-account mt-3">
+                                        <p>회원이 아니신가요? <a class="text-primary" href="../../member/sign_up/">회원가입</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="{% static './vendor/global/global.min.js.' %}"></script>
+    <script src="{% static './vendor/bootstrap-select/dist/js/bootstrap-select.min.js'%}"></script>
+    <script src="{% static './js/custom.min.js'%}"></script>
+    <script src="{% static './js/deznav-init.js'%}"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,208 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AR라봉 익명게시판</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png">
+	<link href="/static//vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+		{% include 'nav-header.html' %}
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+	
+		
+        <!--**********************************
+            Header start
+        ***********************************-->
+		{% include 'navbar.html' %}
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        {% include 'sidebar.html' %}
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+		
+        <div class="content-body">
+			<div class="container-fluid">
+				<!-- Add Project -->
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+
+                            <h2 class="font-w600 mb-2 mr-auto">익명 게시판</h2>
+                            <h4>바른 말, 고운 말</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+					<span class="mr-2">
+						<input class="btn btn-primary btn-sl-sm mr-2" type="button" onClick="location.href='/board/board_write/'" value="글 작성" />
+                    </div>
+                </div> 
+                <!-- row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                    <div class="email-list mt-3">
+										<div class="jumbotron">
+											<div class="container text-center">
+												<table class="table table-hover">
+													<thead>
+													{% comment %} {% for article in articles %} {% endcomment %}
+														<tr>
+															<th>번호</th>
+															<th>제목</th>
+															<th>등록일</th>
+															<th>조회수</th>
+															<th>Like</th>
+															<th>신고</th> 
+														</tr>
+														{% comment %} {% endfor %} {% endcomment %}
+													</thead>
+													<tbody>
+														{% if listview %}
+														{% for B_list_write in listview %}
+														<tr class = "text-center" style="cursor:pointer;" onclick="location.href='/board/board_read/{{ B_list_write.id }}/'">
+															<td>{{ B_list_write.id}}</td>
+															<td>{{ B_list_write.title}}</td>
+															<td>{{ B_list_write.date }}</td>
+														</tr>
+														{% endfor %}
+														{% else %}
+														<tr class="text-center">
+															<td colspan="5">
+																작성된 게시글이 없습니다.
+															</td>
+														</tr>
+														{% endif %}
+													</tbody>
+												</table>
+											</div>
+										</div>
+                                    </div>
+                                    <!-- panel -->
+                                    <div class="row mt-4">
+										<div id="paging">
+											<div class="col-12 pl-3">
+												<nav>
+													{% if is_paginated %}
+													<ul class="pagination pagination-gutter pagination-primary pagination-sm no-bg">
+														<!-- 이전페이지 -->
+														{% if page_obj.has_previous %}
+														<li class="page-item page-indicator">
+															<a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+																tabindex="-1">이전</a><i class="la la-angle-left"></i></a>
+														</li>
+														{% else %}
+														<li class="page-item ">
+															<a class="page-link" tabindex="-1" href="#">이전</a>
+														</li>
+														{% endif %}
+														<!-- 페이지리스트 -->
+														{% for page in page_range %}
+														
+														<li class="page-item {% if page == page_obj.number %} active {% endif %}">
+															<a class="page-link" href="?page={{ page }}">{{ page }}</a>
+														</li>
+														{% endfor %}
+														{% if page_obj.has_next %}
+														<li class="page-item">
+															<a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+														</li>
+
+														{% else %}
+														<li class="page-item page-indicator">
+															<a class="page-link" href="#">다음<i class="la la-angle-right"></i></a>
+														</li>
+														{% endif %}
+													</ul>
+													{% endif %}
+												</nav>
+											</div>
+										</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {% include 'footer.html' %}
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+        
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="/static/vendor/global/global.min.js"></script>
+	<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="/static/js/custom.min.js"></script>
+	<script src="/static/js/deznav-init.js"></script>
+    
+    
+</body>

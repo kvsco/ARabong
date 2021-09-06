@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>약속게시판홈</title>
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png" />
+  <link rel="stylesheet" href="/static/vendor/chartist/css/chartist.min.css" />
+  <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+  <link href="/static/vendor/owl-carousel/owl.carousel.css" rel="stylesheet" />
+  <link href="/static/css/style.css" rel="stylesheet" />
+  <style>
+    .col-xl-9 {
+      background-color: gray;
+      border-radius: 20px;
+      color: white;
+      height: 300px;
+    }
+
+    .col-xl-3 {
+      background-color: black;
+      border-radius: 20px;
+      color: white;
+      height: 300px;
+    }
+
+    .promise-button {
+      margin: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <!--*******************
+        Preloader start
+    ********************-->
+  <div id="preloader">
+    <div class="sk-three-bounce">
+      <div class="sk-child sk-bounce1"></div>
+      <div class="sk-child sk-bounce2"></div>
+      <div class="sk-child sk-bounce3"></div>
+    </div>
+  </div>
+  <!--*******************
+        Preloader end
+    ********************-->
+
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+  <div id="main-wrapper">
+    <!--**********************************            Nav header start        ***********************************-->
+    {% include 'navbar.html' %}
+    <!--**********************************            Nav header end        ***********************************-->
+
+    <!--**********************************            Header start        ***********************************-->
+    {% include 'nav-header.html' %}
+
+    <!--**********************************            Sidebar start        ***********************************-->
+    {% include 'sidebar.html' %}
+    <!--**********************************            Sidebar end        ***********************************-->
+
+    <!--**********************************            Content body start        ***********************************-->
+    <div class="content-body">
+      <div class="container-fluid">
+        <div class="form-head mb-sm-5 mb-3 d-flex flex-wrap align-items-center">
+          <h2 class="font-w600 mb-2 mr-auto">약속게시판</h2>
+          <div class="promise-button" style="float: right">
+            <button type="button" class="btn btn-primary setter" onClick="location.href='/board/promise_write/'">
+              글쓰기
+            </button>
+          </div>
+          {% for message in messages %}
+          <div
+            class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center"
+            role="alert" style="left">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+          </div>
+          {% endfor %}
+          <script>
+            window.setTimeout(function () {
+              $(".alert-auto-dismissible")
+                .fadeTo(500, 0)
+                .slideUp(500, function () {
+                  $(this).remove();
+                });
+            }, 2000);
+          </script>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">게시글</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-responsive-sm">
+                  <thead>
+                    <tr class="text-center">
+                      <th>#</th>
+                      <th>제목</th>
+                      <th>약속시간</th>
+                      <th>작성자</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if info %} {% for p in info %}
+                    <tr class="text-center" style="cursor: pointer"
+                      onClick="location.href='../../../board/promise_read/{{p.id}}/'">
+                      <th>{{p.id}}</th>
+                      <td>{{p.title}}</td>
+                      <td>{{p.time}}</td>
+                      <td>{{p.name}}</td>
+                    </tr>
+                    {% endfor %} {% endif %}
+                  </tbody>
+                </table>
+                <hr />
+                <div>
+                  <nav>
+                    <ul class="
+                          pagination pagination-gutter pagination-primary
+                          no-bg
+                        ">
+                      <li class="page-item page-indicator">
+                        <a class="page-link" href="javascript:void(0)">
+                          <i class="la la-angle-left"></i></a>
+                      </li>
+                      {% for i in pagination %}
+                      <li class="page-item">
+                        <a class="page-link" href="../../../board/promise/?page={{i}}">{{i}}</a>
+                      </li>
+                      {% endfor %}
+                      <li class="page-item page-indicator">
+                        <a class="page-link" href="javascript:void(0)">
+                          <i class="la la-angle-right"></i></a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--**********************************
+            Content body end
+        ***********************************-->
+
+  <!--**********************************
+            Footer start
+        ***********************************-->
+  {% include 'footer.html' %}
+  <!--**********************************
+            Footer end
+        ***********************************-->
+
+  <!--**********************************
+        Scripts
+    ***********************************-->
+  <!-- Required vendors -->
+  <script src="/static/vendor/global/global.min.js"></script>
+  <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+  <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+
+  <script src="/static/vendor/owl-carousel/owl.carousel.js"></script>
+  <script src="/static/js/custom.min.js"></script>
+  <script src="/static/js/deznav-init.js"></script>
+</body>
+
+</html>

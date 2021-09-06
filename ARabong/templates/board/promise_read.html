@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>WEB default</title>
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/images/favicon.png"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/vendor/chartist/css/chartist.min.css"
+    />
+    <link
+      href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/static/vendor/owl-carousel/owl.carousel.css"
+      rel="stylesheet"
+    />
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <style>
+      .col-xl-9 {
+        background-color: gray;
+        border-radius: 20px;
+        color: white;
+        height: 300px;
+      }
+
+      .col-xl-3 {
+        background-color: black;
+        border-radius: 20px;
+        color: white;
+        height: 300px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+      <div class="sk-three-bounce">
+        <div class="sk-child sk-bounce1"></div>
+        <div class="sk-child sk-bounce2"></div>
+        <div class="sk-child sk-bounce3"></div>
+      </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+      <!--**********************************
+            Nav header start
+        ***********************************-->
+      {% include 'navbar.html' %}
+      <!--**********************************
+            Nav header end
+        ***********************************-->
+
+      <!--**********************************
+            Header start
+        ***********************************-->
+      {% include 'nav-header.html' %}
+      <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+      <!--**********************************
+            Sidebar start
+        ***********************************-->
+      {% include 'sidebar.html' %}
+      <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+      <!--**********************************
+            Content body start
+        ***********************************-->
+      <div class="content-body">
+        <div class="container-fluid">
+          <div
+            class="form-head mb-sm-5 mb-3 d-flex flex-wrap align-items-center"
+          >
+            <h2 class="font-w600 mb-2 mr-auto">약속게시판</h2>
+          </div>
+          <div class="col-xl-10">
+            <div class="card">
+              <div class="card-body">
+                <div class="post-details">
+                  <h3 class="mb-2 text-black">{{title}}</h3>
+                  <ul class="mb-4 post-meta d-flex flex-wrap">
+                    <li class="mr-3">{{type}}</li>
+                    <li class="post-date mr-3">
+                      <i class="fa fa-calender"></i>약속시간 : {{time}}
+                    </li>
+                    <li class="post-author mr-3">By{{name}}</li>
+                  </ul>
+                  <img
+                    src="images/profile/8.jpg"
+                    alt=""
+                    class="img-fluid mb-3 w-100"
+                  />
+                  <p>{{contents}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--**********************************
+            Content body end
+        ***********************************-->
+
+    <!--**********************************
+            Footer start
+        ***********************************-->
+    {% include 'footer.html' %}
+    <!--**********************************
+            Footer end
+        ***********************************-->
+
+    <!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+    <!--**********************************
+           Support ticket button end
+        ***********************************-->
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="/static/vendor/global/global.min.js"></script>
+    <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+
+    <!-- Chart piety plugin files -->
+    <script src="/static/vendor/peity/jquery.peity.min.js"></script>
+
+    <!-- Apex Chart -->
+    <script src="/static/vendor/apexchart/apexchart.js"></script>
+
+    <!-- Dashboard 1 -->
+    <script src="/static/js/dashboard/dashboard-1.js"></script>
+    <script src="/static/vendor/owl-carousel/owl.carousel.js"></script>
+    <script src="/static/js/custom.min.js"></script>
+    <script src="/static/js/deznav-init.js"></script>
+  </body>
+</html>

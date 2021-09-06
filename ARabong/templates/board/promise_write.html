@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>약속 작성</title>
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/images/favicon.png"
+    />
+    <!-- Daterange picker -->
+    <link
+      href="/static/vendor/bootstrap-daterangepicker/daterangepicker.css"
+      rel="stylesheet"
+    />
+    <!-- Clockpicker -->
+    <link
+      href="/static/vendor/clockpicker/css/bootstrap-clockpicker.min.css"
+      rel="stylesheet"
+    />
+    <!-- asColorpicker -->
+    <link
+      href="/static/vendor/jquery-asColorPicker/css/asColorPicker.min.css"
+      rel="stylesheet"
+    />
+    <!-- Material color picker -->
+    <link
+      href="/static/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
+      rel="stylesheet"
+    />
+    <!-- Pick date -->
+    <link rel="stylesheet" href="/static/vendor/pickadate/themes/default.css" />
+    <link
+      rel="stylesheet"
+      href="/static/vendor/pickadate/themes/default.date.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Custom Stylesheet -->
+    <link
+      href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css"
+      rel="stylesheet"
+    />
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <style>
+      .col-xl-9 {
+        background-color: gray;
+        border-radius: 20px;
+        color: white;
+        height: 300px;
+      }
+
+      .col-xl-3 {
+        background-color: black;
+        border-radius: 20px;
+        color: white;
+        height: 300px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+      <div class="sk-three-bounce">
+        <div class="sk-child sk-bounce1"></div>
+        <div class="sk-child sk-bounce2"></div>
+        <div class="sk-child sk-bounce3"></div>
+      </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+      <!--**********************************
+            Nav header start
+        ***********************************-->
+      {% include 'navbar.html' %}
+      <!--**********************************
+            Nav header end
+        ***********************************-->
+
+      <!--**********************************
+            Header start
+        ***********************************-->
+      {% include 'nav-header.html' %}
+      <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+      <!--**********************************
+            Sidebar start
+        ***********************************-->
+      {% include 'sidebar.html' %}
+      <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+      <!--**********************************
+            Content body start
+        ***********************************-->
+      <div class="content-body">
+        <div class="container-fluid">
+          <div
+            class="form-head mb-sm-5 mb-3 d-flex flex-wrap align-items-center"
+          >
+            <h2 class="font-w600 mb-2 mr-auto">약속 작성</h2>
+          </div>
+          <div class="Column">
+            <form method="post" action="../../../board/promise/">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-xl-6 col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title">제목</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="basic-form">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control input-default"
+                            placeholder="write here"
+                            name="p_title"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-5 col-lg-5">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title">타입설정</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="custom-control custom-checkbox mb-3">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="customCheckBox1"
+                              name="p_type[]"
+                              value="여자만"
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customCheckBox1"
+                              >여자만</label
+                            >
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div
+                            class="
+                              custom-control custom-checkbox
+                              mb-3
+                              checkbox-info
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              checked
+                              id="customCheckBox2"
+                              name="p_type[]"
+                              value="남자만"
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customCheckBox2"
+                              >남자만</label
+                            >
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div
+                            class="
+                              custom-control custom-checkbox
+                              mb-3
+                              checkbox-success
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              checked
+                              id="customCheckBox3"
+                              name="p_type[]"
+                              value="아무나"
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customCheckBox3"
+                              >아무나</label
+                            >
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div
+                            class="
+                              custom-control custom-checkbox
+                              mb-3
+                              checkbox-warning
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              checked
+                              id="customCheckBox4"
+                              name="p_type[]"
+                              value="20대"
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customCheckBox4"
+                              >20대</label
+                            >
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div
+                            class="
+                              custom-control custom-checkbox
+                              mb-3
+                              checkbox-danger
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              checked
+                              id="customCheckBox5"
+                              name="p_type[]"
+                              value="30대"
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="customCheckBox5"
+                              >30대</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10 col-xl-10 col-xxl-10 mb-3">
+                <label>Now time</label>
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    id="single-input"
+                    value=""
+                    placeholder="Now"
+                    name="p_time"
+                    required
+                  />
+                  <div class="input-group-append">
+                    <button
+                      type="button"
+                      id="check-minutes"
+                      class="btn waves-effect waves-light btn-ft btn-success"
+                    >
+                      Check the minutes
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-10 col-lg-10">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="card-title">내용 작성</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="basic-form">
+                      <div class="form-group">
+                        <textarea
+                          class="form-control"
+                          rows="4"
+                          id="comment"
+                          placeholder="내용을 작성하세요."
+                          name="p_contents"
+                          required
+                        ></textarea>
+                        <br />
+                        <div class="promise-button" style="float: right">
+                          <button type="submit" class="btn btn-primary setter">
+                            등록
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-primary cancle"
+                            onClick="location.href='/board/promise/'"
+                          >
+                            취소
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--**********************************
+            Content body end
+        ***********************************-->
+
+    <!--**********************************
+            Footer start
+        ***********************************-->
+    {% include 'footer.html' %}
+    <!--**********************************
+            Footer end
+        ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="/static/vendor/global/global.min.js"></script>
+    <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
+    <!-- Daterangepicker -->
+    <!-- momment js is must -->
+    <script src="/static/vendor/moment/moment.min.js"></script>
+    <script src="/static/vendor/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- clockpicker -->
+    <script src="/static/vendor/clockpicker/js/bootstrap-clockpicker.min.js"></script>
+    <!-- asColorPicker -->
+    <script src="/static/vendor/jquery-asColor/jquery-asColor.min.js"></script>
+    <script src="/static/vendor/jquery-asGradient/jquery-asGradient.min.js"></script>
+    <script src="/static/vendor/jquery-asColorPicker/js/jquery-asColorPicker.min.js"></script>
+    <!-- Material color picker -->
+    <script src="/static/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- pickdate -->
+    <script src="/static/vendor/pickadate/picker.js"></script>
+    <script src="/static/vendor/pickadate/picker.time.js"></script>
+    <script src="/static/vendor/pickadate/picker.date.js"></script>
+
+    <!-- Daterangepicker -->
+    <script src="/static/js/plugins-init/bs-daterange-picker-init.js"></script>
+    <!-- Clockpicker init -->
+    <script src="/static/js/plugins-init/clock-picker-init.js"></script>
+    <!-- asColorPicker init -->
+    <script src="/static/js/plugins-init/jquery-asColorPicker.init.js"></script>
+    <!-- Material color picker init -->
+    <script src="/static/js/plugins-init/material-date-picker-init.js"></script>
+    <!-- Pickdate -->
+    <script src="/static/js/plugins-init/pickadate-init.js"></script>
+
+    <script src="/static/js/custom.min.js"></script>
+    <script src="/static/js/deznav-init.js"></script>
+  </body>
+</html>

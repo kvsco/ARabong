@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ARlabong board_detail</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png">
+	<link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        {% include 'nav-header.html' %}
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        {% include 'navbar.html' %}
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        {% include 'sidebar.html' %}
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+		    <div class="container-fluid">
+				<!-- Add Project -->
+				<div class="modal fade" id="addProjectSidebar">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Create Project</h5>
+								<button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+								</button>
+							</div>
+						    <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="text-black font-w500">Project Name</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-black font-w500">Deadline</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="text-black font-w500">Client Name</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary">CREATE</button>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>익명 게시판</h4>
+                            <span>바른 말, 고운 말</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                        <form method="get" action="../../../board/board_rewrite/{{index_id}}/">
+                            <div class="card-header">
+                                <div class="form-group" style="text-align:left; font-weight:bold; font-size:20px ">
+                                    <input name="r_id" type="hidden" value='{{id}}'></input>
+                                    <input name="r_title" type="hidden" value='{{title}}'></input>
+                                    <input name="r_date" type="hidden" value='{{date}}'></input>
+                                    <strong> {{ title }}</strong>
+                                </div>
+                                <div style="text-align:right">
+                                    <span>글 작성시간: {{ date }}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="email-right-box ml-0 ml-sm-4 ml-sm-0" style="padding: 0px;">
+                                    <div class="compose-content">
+                                          <!--내용-->
+                                        <div class="form-group">
+                                            <div style="text-align:left; font-weight:bold; font-size:15px ">
+                                                <a>글 내용</a><br><br>
+                                            </div>
+                                            {{ contents }}
+                                        </div>
+                                    </div>
+                                        {% comment %} {% if article.author == user_id %}{% endcomment %}
+                                    <span class="text-left mt-4 mb-3">
+                                        {% if request.session.user_id == id %}
+                                        <button type='submit' class="btn btn-primary btn-sl-sm mr-2">
+                                            <i class="fa fa-paper-plane"></i>수정</button>
+                                        
+                                        <button onclick="javascript:delete_btn()">
+                                            <i class="fa fa-times" aria-hidden="true"></i>삭제
+                                        </button>
+                                        <script>
+                                            function delete_btn(){
+                                                alert('삭제하시겠습니까??')
+                                            }
+                                        </script>
+                                        {% endif %}
+                                    </span> 
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {% include 'footer.html'%}
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+        
+    </div>
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="/static/vendor/global/global.min.js"></script>
+	<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="/static/js/custom.min.js"></script>
+	<script src="/static/js/deznav-init.js"></script>
+    
+    
+</body>

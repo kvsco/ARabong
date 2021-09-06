@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>프로필 </title>
+	<!-- Favicon icon -->
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png">
+	<link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+	<link href="/static/vendor/lightgallery/css/lightgallery.min.css" rel="stylesheet">
+	<link href="/static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<!--*******************
+        Preloader start
+    ********************-->
+	<div id="preloader">
+		<div class="sk-three-bounce">
+			<div class="sk-child sk-bounce1"></div>
+			<div class="sk-child sk-bounce2"></div>
+			<div class="sk-child sk-bounce3"></div>
+		</div>
+	</div>
+	<!--*******************
+        Preloader end
+    ********************-->
+
+	<!--**********************************
+        Main wrapper start
+    ***********************************-->
+	<div id="main-wrapper">
+		{% include 'nav-header.html' %}
+		<!--**********************************
+        nav-head
+   		***********************************-->
+
+		{% include 'navbar.html'%}
+		<!--**********************************
+        nav
+   		***********************************-->
+		{% include 'sidebar.html'%}
+
+		<!--**********************************
+            Content body start
+        ***********************************-->
+		<div class="content-body">
+			<div class="container-fluid">
+				<!-- Add Project -->
+				<div class="modal fade" id="addProjectSidebar">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Create Project</h5>
+								<button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form>
+									<div class="form-group">
+										<label class="text-black font-w500">Project Name</label>
+										<input type="text" class="form-control">
+									</div>
+									<div class="form-group">
+										<label class="text-black font-w500">Deadline</label>
+										<input type="date" class="form-control">
+									</div>
+									<div class="form-group">
+										<label class="text-black font-w500">Client Name</label>
+										<input type="text" class="form-control">
+									</div>
+									<div class="form-group">
+										<button type="button" class="btn btn-primary">CREATE</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row page-titles mx-0">
+					<div class="col-sm-6 p-md-0">
+						<div class="welcome-text">
+							<h4> 정보를 수정해보세요! </h4>
+							<p class="mb-0">{{request.session.user_name}} 님의 프로필</p>
+						</div>
+					</div>
+					<div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
+						</ol>
+					</div>
+				</div>
+				<!-- row -->
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="profile card card-body px-3 pt-3 pb-0">
+							<div class="profile-head">
+								{% comment %} <div class="photo-content"> {% endcomment %}
+									<div class="cover-photo"></div>
+								</div>
+								<div class="profile-info">
+									<div class="profile-photo">
+										<img src="/static/images/profile/profile.png" class="img-fluid rounded-circle"
+											alt="">
+									</div>
+									<div class="profile-details">
+										<div class="profile-name px-3 pt-2">
+											<h4 class="text-primary mb-0">{{request.session.user_name}}</h4>
+										</div>
+										<div class="profile-email px-2 pt-2">
+											<p>Email</p>
+											<h4 class="text-muted mb-0">{{request.session.user_id}}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div class="col-xl-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="profile-tab">
+									<div class="custom-tab-1">
+										<ul class="nav nav-tabs">
+											<li class="nav-item"><a href="#my-posts" data-toggle="tab"
+													class="nav-link active show">회원탈퇴</a>
+											</li>
+
+											<li class="nav-item"><a href="#profile-settings" data-toggle="tab"
+													class="nav-link">회원정보수정</a>
+											</li>
+										</ul>
+										<div class="tab-content">
+											<div id="my-posts" class="tab-pane fade active show">
+												<div class="my-post-content pt-3">
+													<div class="post-input">
+														<textarea name="textarea" id="textarea" cols="30" rows="5"
+															class="form-control bg-transparent"
+															placeholder="Please type what you want...."></textarea>
+														<!-- Modal -->
+														<div class="modal fade" id="linkModal">
+															<div class="modal-dialog modal-dialog-centered"
+																role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title">Social Links</h5>
+																		<button type="button" class="close"
+																			data-dismiss="modal"><span>&times;</span>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<a class="btn-social facebook"
+																			href="javascript:void(0)"><i
+																				class="fa fa-facebook"></i></a>
+																		<a class="btn-social google-plus"
+																			href="javascript:void(0)"><i
+																				class="fa fa-google-plus"></i></a>
+																		<a class="btn-social linkedin"
+																			href="javascript:void(0)"><i
+																				class="fa fa-linkedin"></i></a>
+																		<a class="btn-social instagram"
+																			href="javascript:void(0)"><i
+																				class="fa fa-instagram"></i></a>
+																		<a class="btn-social twitter"
+																			href="javascript:void(0)"><i
+																				class="fa fa-twitter"></i></a>
+																		<a class="btn-social youtube"
+																			href="javascript:void(0)"><i
+																				class="fa fa-youtube"></i></a>
+																		<a class="btn-social whatsapp"
+																			href="javascript:void(0)"><i
+																				class="fa fa-whatsapp"></i></a>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<!-- Modal -->
+														<a href="javascript:void(0);" class="btn btn-primary"
+															data-toggle="modal" data-target="#postModal">탈퇴하기</a>
+														<!-- Modal -->
+														<div class="modal fade" id="postModal">
+															<div class="modal-dialog modal-dialog-centered"
+																role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title">Post</h5>
+																		<button type="button" class="close"
+																			data-dismiss="modal"><span>&times;</span>
+																		</button>
+																	</div>
+																	<div class="modal-body">
+																		<textarea name="textarea" id="textarea2"
+																			cols="30" rows="5"
+																			class="form-control bg-transparent"
+																			placeholder="Please type what you want...."></textarea>
+																		<a class="btn btn-primary btn-rounded"
+																			href="/firstapp/">Post</a> <!-- 이부분 수정필요-->
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div id="profile-settings" class="tab-pane fade">
+												<div class="pt-3">
+													<div class="settings-form">
+														<h4 class="text-primary">Account Setting</h4><br>
+														<form>
+
+															<div class="form-group">
+																<label>Profile Image</label><br>
+																<div style="position:relative;"><input id="imageFile"
+																		type="file"><input type="button" id="removeimg"
+																		value="삭제"></div><br>
+																**정사각형 형태의 이미지가 알맞습니다.**<br>
+																<input type="button"
+																	class="btn btn-rounded btn-outline-warning"
+																	id="resizingbtn" style="margin-top: 30px;"
+																	value="이미지 크기 조절 및 미리보기 : 더블클릭!"
+																	onclick="ResizeImage()" />
+																<div class="form-group col-md-6"
+																	style="position:absolute; top:150px; left: 600px;">
+																	<img src="" id="output"
+																		style="width: 200px; height: 200px;"></div>
+															</div>
+													</div>
+													<br><br>
+													<div class="form-row">
+														<div class="form-group col-md-6">
+															<label>닉네임</label>
+															<input type="email" placeholder="Email"
+																class="form-control">
+														</div>
+														<div class="form-group col-md-6">
+															<label>Password</label>
+															<input type="password" placeholder="Password"
+																class="form-control">
+														</div>
+
+														<button class="btn btn-primary" type="submit">수정하기</button>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Modal -->
+									<div class="modal fade" id="replyModal">
+										<div class="modal-dialog modal-dialog-centered" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Post Reply</h5>
+													<button type="button" class="close"
+														data-dismiss="modal"><span>&times;</span></button>
+												</div>
+												<div class="modal-body">
+													<form>
+														<textarea class="form-control" rows="4">Message</textarea>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-danger light"
+														data-dismiss="modal">Close</button>
+													<button type="button" class="btn btn-primary">Reply</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--**********************************
+            Content body end
+        ***********************************-->
+
+		<!--**********************************
+            Footer start
+        ***********************************-->
+		{% include 'footer.html'%}
+		<!--**********************************
+            Footer end
+        ***********************************-->
+	</div>
+	<!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+	<!--removeIf(production)-->
+
+	<!--**********************************
+        Scripts
+    ***********************************-->
+	<!-- Required vendors -->
+	<script src="{% static './vendor/global/global.min.js' %}"></script>
+	<script src="{% static './vendor/bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
+	<script src="{% static './vendor/lightgallery/js/lightgallery-all.min.js' %}"></script>
+	<script src="{% static './js/custom.min.js' %}"></script>
+	<script src="{% static './js/deznav-init.js' %}"></script>
+
+	<script language="javascript">
+
+
+
+		function ResizeImage() {
+			let filesToUpload = document.getElementById('imageFile').files;
+			let file = filesToUpload[0];
+			// 문서내에 img 객체를 생성합니다
+			let img = document.createElement("img");
+			// 파일을 읽을 수 있는 File Reader 를 생성합니다
+			let reader = new FileReader();
+			// 파일이 읽혀지면 아래 함수가 실행됩니다
+
+			reader.onload = function (e) {
+				img.src = e.target.result;
+				//var outputimg = document.getElementById('output');
+				//img.src = 'data:image/png;base64,' + img.src;
+				// HTML5 canvas 객체를 생성합니다
+
+				var canvas = document.createElement("canvas");
+				var ctx = canvas.getContext("2d");
+				// 캔버스에 업로드된 이미지를 그려줍니다
+				ctx.drawImage(img, 0, 0);
+
+				// 최대폭을 400 으로 정했다고 가정했을때
+
+				// 최대폭을 넘어가는 경우 canvas 크기를 변경해 줍니다.
+				var MAX_WIDTH = 400;
+				var MAX_HEIGHT = 400;
+				var width = img.width;
+				var height = img.height;
+
+				if (width > height) {
+					if (width > MAX_WIDTH) {
+						width = MAX_WIDTH;
+						height = width;
+					}
+
+				} else {
+					if (height > MAX_HEIGHT) {
+						height = MAX_HEIGHT;
+						width = height;
+					}
+				}
+				canvas.width = width;
+				canvas.height = height;
+				// canvas에 변경된 크기의 이미지를 다시 그려줍니다.
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(img, 0, 0, width, height);
+				// canvas 에 있는 이미지를 img 태그로 넣어줍니다
+				var dataurl = canvas.toDataURL("image/png");
+				document.getElementById('output').src = dataurl;
+
+			};
+			// imgblob = new Blob(chunks, {'type': 'image/png'})
+			// chunks = []
+			// imgurl = URL.createObjectUrl(imgblob)
+
+			const formData = new FormData();
+			formData.append('image', document.getElementById('imageFile').files[0]);
+
+			$.ajax({
+				url: '/firstapp/app_profile/',
+				type: 'post',
+				processData: false,
+				contentType: false,
+				data: formData,
+				success: function (res) {
+					console.log('ok')
+				}
+			});
+			reader.readAsDataURL(file);
+		}
+
+		let removeimg = document.getElementById('removeimg')
+		removeimg.addEventListener("click", () => {
+			document.getElementById('output').src = ""
+			console.log(output.getAttribute('src'))
+		});
+
+
+	</script>
+</body>
+
+</html>

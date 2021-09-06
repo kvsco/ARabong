@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>welcome AR라봉</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png" />
+    <link rel="stylesheet" href="/static/vendor/chartist/css/chartist.min.css" />
+    <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="/static/vendor/owl-carousel/owl.carousel.css" rel="stylesheet" />
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <style>
+        .col-xl-9 {
+            background-color: gray;
+            border-radius: 20px;
+            color: white;
+            height: 300px;
+        }
+
+        .col-xl-3 {
+            background-color: black;
+            border-radius: 20px;
+            color: white;
+            height: 300px;
+        }
+
+        .j {
+            text-align: center;
+
+        }
+        .card img {
+            width: 160px; height: 180px;
+        }
+    </style>
+</head>
+
+<body>
+    <!--*******************        Preloader start    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************        Preloader end    ********************-->
+
+    <!--**********************************        Main wrapper start    ***********************************-->
+    <div id="main-wrapper">
+        {% include 'nav-header.html' %}
+        <!--**********************************             nav-header end        ***********************************-->
+        {% include 'navbar.html' %}
+        <!--**********************************             nav end        ***********************************-->
+        {% include 'sidebar.html' %}
+        <!--**********************************             Sidebar end        ***********************************-->
+
+        <!--**********************************            Content body start        ***********************************-->
+        <div class="content-body" style="min-height:884px; text-align:center;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header d-block">
+                            <h4 class="card-title"><strong>용빈</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="card" style="width:100%; height:auto;">
+                                <img src="/static/images/avatar/용빈.jpg">
+                                <a>ID : kvsco</a><br>
+                                <a>nngjk@naver.com</a><br>
+                                <a>DATABASE</a><br>
+                                <a>TEMPLATES</a><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-left: 10px;">
+                        <div class="card-header d-block">
+                            <h4 class="card-title"><strong>민주</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="card" style="width:100%; height:auto;">
+                                <img src="/static/images/avatar/민주.jpg">
+                                <a>ID : meju5108</a><br>
+                                <a>meju5108@gmail.com</a><br>
+                                <a>CHATTING</a><br>
+                                <a>BACKEND</a><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-left: 10px;">
+                        <div class="card-header d-block">
+                            <h4 class="card-title"><strong>태경</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="card" style="width:100%; height:auto;">
+                                <img src="/static/images/avatar/태경.jpg">
+                                <a>ID : dhxorud</a><br>
+                                <a>dhxorud1460@gmail</a><br>
+                                <a>CHATTING</a><br>
+                                <a>BACKEND</a><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-left: 10px;">
+                        <div class="card-header d-block">
+                            <h4 class="card-title"><strong>지혜</strong></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="card" style="width:100%; height:auto;">
+                                <img src="/static/images/avatar/지혜.jpg" size="300×300">
+                                <a>ID : lala</a><br>
+                                <a>krystle.pk@gmail.com</a><br>
+                                <a>DESIGN</a><br>
+                                <a>BOARD-FULLSTACK</a><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+                <!--**********************************        Scripts    ***********************************-->
+                <!-- Required vendors -->
+                <script src="/static/vendor/global/global.min.js"></script>
+                <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+                <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+
+                <!-- Chart piety plugin files -->
+                <script src="/static/vendor/peity/jquery.peity.min.js"></script>
+
+                <!-- Apex Chart -->
+                <script src="/static/vendor/apexchart/apexchart.js"></script>
+
+                <!-- Dashboard 1 -->
+                <script src="/static/js/dashboard/dashboard-1.js"></script>
+
+                <script src="/static/vendor/owl-carousel/owl.carousel.js"></script>
+                <script src="/static/js/custom.min.js"></script>
+                <script src="/static/js/deznav-init.js"></script>
+</body>
+
+</html>

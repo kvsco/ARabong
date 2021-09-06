@@ -1,0 +1,315 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AR map to chat</title>
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon.png" />
+  <link rel="stylesheet" href="/static/vendor/chartist/css/chartist.min.css" />
+  <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
+  <link href="/static/vendor/owl-carousel/owl.carousel.css" rel="stylesheet" />
+  <link href="/static/css/style.css" rel="stylesheet" />
+  <script src='http://code.jquery.com/jquery-3.1.1.min.js'></script>
+</head>
+
+<body>
+  <!--*******************        Preloader start    ********************-->
+  <div id="preloader">
+    <div class="sk-three-bounce">
+      <div class="sk-child sk-bounce1"></div>
+      <div class="sk-child sk-bounce2"></div>
+      <div class="sk-child sk-bounce3"></div>
+    </div>
+  </div>
+  <!--*******************        Preloader end    ********************-->
+
+  <!--**********************************        Main wrapper start    ***********************************-->
+  <div id="main-wrapper">
+    <!--**********************************            Nav header start        ***********************************-->
+    {% include 'nav-header.html'%}
+
+    <!--**********************************            Nav header end        ***********************************-->
+
+    <!--**********************************            Chat box start        ***********************************-->
+
+    <!--**********************************            Chat box End        ***********************************-->
+
+    <!--**********************************            Header start        ***********************************-->
+    {% include 'navbar.html'%}
+
+    <!--**********************************            Header end ti-comment-alt        ***********************************-->
+
+    <!--**********************************            Sidebar start        ***********************************-->
+    {% include 'sidebar.html' %}
+
+    <!--**********************************            Sidebar end        ***********************************-->
+
+    <!--**********************************            Content body start        ***********************************-->
+    <div class="content-body">
+      <div class="container-fluid">
+        <div class="row page-titles mx-0">
+          <div class="col-sm-12 p-md-0">
+            <div class="welcome-text">
+              <h4>AR 채팅방 입장하기</h4>
+              <span>지도를 클릭하여 채팅방에 입장하거나, 새로운 채팅방을 개설하세요!</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-head mb-sm-5 mb-3 d-flex flex-wrap align-items-center">
+          <!--************************************** 지 도 d i v 입니다 ************************************************-->
+          <div id="map" style="width: 100%; height: 500px; position: relative; z-index: 1;">
+            <div style="width: 100%; display: flex; justify-content: center; position: absolute; z-index: 5;">
+              <div id="alert_window"></div>
+            </div>
+            <!-- 채팅방 검색 -->
+            <div class="card" id="search_room_card"
+              style="z-index: 3; width: 38%; height: 500px; background-color: rgba(255, 255, 255, 0.3);">
+              <div class="card-header">
+                <input type="text" class="form-control" placeholder="채팅방 검색..." id="search_room_input">&nbsp;
+                <a href="javascript:void(0)" id="search_room_button"><i class="flaticon-381-search-2"></i></a>
+              </div>
+              <div class="dataTables_scrollBody" style="overflow: auto;">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <tbody id="search_room" style="background-color:rgba(255, 255, 255, 0.6);">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=da146a2a6ff6a54903c1d2a7caecd1c7"></script>
+          <script>
+            //***************** draw map
+            var mapContainer = document.getElementById("map"),
+              mapOption = {
+                center: new kakao.maps.LatLng(33.467427, 126.3293),
+                level: 4,
+              };
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 지도에 지형 정보 추가
+            map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
+            var chat_title = "default";
+
+            //***************** draw marker
+            // addMarker(new kakao.maps.LatLng(33.467427, 126.3293)); // default marker 표시.
+
+            // 채팅방 리스트 로드, 반경 그리기
+            const circle_redius = 100;
+            $.ajax({
+              url: "/board/map_data/",
+              success: function (res) {
+                for (const pin of res) {
+                  addCircle(new kakao.maps.LatLng(pin.lat, pin.lng));
+                }
+                pin_list = res;
+              },
+            });
+
+            // 채팅방 검색
+            $.ajax({
+              url: "/board/room_data/",
+              success: function (res) {
+                rd_list = res;
+              },
+            });
+            $("#search_room_button").on("click", function () {
+              $("#search_room").html("");
+              for (const search of rd_list) {
+                if (search.roomName.indexOf(document.querySelector('#search_room_input').value) != -1 & search.userCount != 0) {
+                  document.querySelector('#search_room').innerHTML += `
+                      <tr onClick="window.open('/chat/${search.roomUrl}')" style="cursor:pointer;">
+                        <td>
+                          <span>${search.roomName}</span>
+                        </td>
+                        <td>
+                          {% if c.userCount > 10 %}
+                          <span class="badge light badge-danger">${search.userCount}명 접속 중</span>
+                          {% elif c.userCount > 5  %}
+                          <span class="badge light badge-info">${search.userCount}명 접속 중</span>
+                          {% elif c.userCount > 1  %}
+                          <span class="badge light badge-success">${search.userCount}명 접속 중</span>
+                          {% else %}
+                          <span class="badge light badge-dark">1명 이하 접속 중</span>
+                          {% endif %}
+                        </td>
+                      </tr>`
+                }
+              }
+            });
+            document.querySelector('#search_room_input').onkeyup = function (e) {
+              if (e.keyCode === 13) {
+                document.querySelector('#search_room_button').click();
+              }
+            };
+
+            //***************** 지도클릭 - > 마커 추가
+            kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+              //console.log(lat)
+              var tooClose = 0;
+              for (const pos of pin_list) {
+                // console.log(calcLength(new kakao.maps.LatLng(pos.lat, pos.lng), mouseEvent.latLng))
+                if (calcLength(new kakao.maps.LatLng(pos.lat, pos.lng), mouseEvent.latLng) < circle_redius) {
+                  tooClose = 1;
+                }
+              }
+              if (tooClose == 0) {
+                chat_title = prompt("채팅방 제목을 입력하세요.");
+                if (chat_title == null | chat_title == "") {
+                  // alert("다시 선택하세요");
+                } else {
+                  addMarker(mouseEvent.latLng);
+                  addCircle(mouseEvent.latLng);
+                  var latlng = mouseEvent.latLng; //ajax ->title
+                  // console.log(chat_title);
+                  $.ajax({
+                    url: "/board/map/",
+                    type: "post",
+                    data: { lat: latlng.Ma, lng: latlng.La, title: chat_title },
+                  });
+                  pin_list[pin_list.length] = { id: pin_list[pin_list.length - 1].id + 1, title: chat_title, lat: latlng.Ma, lng: latlng.La };
+                  $.ajax({
+                    url: `/board/map/`,
+                    data: {
+                      roomname: chat_title,
+                      roomUrl: charToUnicode(chat_title).replace(/\\/g, ""),
+                      userCount: 1
+                    },
+                  });
+                  rd_list[rd_list.length] = { roomName: chat_title, roomUrl: charToUnicode(chat_title).replace(/\\/g, ""), userCount: 1 };
+                  $("#alert_window").html(`<div class="alert alert-success alert-dismissible fade show" id="create_room">
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>	
+									<strong>알림!</strong> 채팅방을 만들었습니다. &nbsp;&nbsp;&nbsp;
+									<button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                                    </button>
+                                </div>`);
+                  window.setTimeout(function () {
+                    $("#create_room")
+                      .fadeTo(300, 0)
+                      .slideUp(300, function () {
+                        $(this).remove();
+                      });
+                  }, 2000);
+                }
+              } else {
+                $("#alert_window").html(`<div class="alert alert-warning alert-dismissible fade show" id="already_room">
+									<svg viewBox="0 0 24 24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+									<strong>알림!</strong> 이미 채팅방이 개설된 지역입니다. &nbsp;&nbsp;&nbsp;
+									<button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                                    </button>
+                                </div>`);
+                window.setTimeout(function () {
+                  $("#already_room")
+                    .fadeTo(300, 0)
+                    .slideUp(300, function () {
+                      $(this).remove();
+                    });
+                }, 2000);
+              }
+            });
+
+            // 채팅방 이름 유니코드 변환 함수
+            function charToUnicode(str) {
+              if (!str) return false;
+              var unicode = '';
+              for (var i = 0, j = str.length; i < j; i++) {
+                unicode += '\\' + str[i].charCodeAt(0).toString(16);
+              };
+              return unicode;
+            }
+
+            // 추가된 마커 push, map에 draw
+            function addMarker(position) {
+              //var iwContent = '<input placeholder="채팅방제목입력" style="padding:5px;"> </input>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+              //    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+              var infowindow = new kakao.maps.InfoWindow({
+                content: `<a target="_blank" href="../../chat/${charToUnicode(chat_title).replace(/\\/g, "")}">${chat_title}</a>`,
+                removable: true,
+              });
+
+              var imageSrc = '/static/images/map_pin.png', // 마커이미지의 주소입니다    
+                imageSize = new kakao.maps.Size(30, 32), // 마커이미지의 크기입니다
+                imageOption = { offset: new kakao.maps.Point(15, 32) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+              var marker = new kakao.maps.Marker({
+                position: position,
+                image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption) //마커이미지 설정
+                //clickable: true
+              });
+              marker.setMap(map); // 마커가 지도 위에 표시되도록 설정합니다
+              //console.log(marker)
+              kakao.maps.event.addListener(marker, "click", function () {
+                // 마커 위에 인포윈도우를 표시합니다
+                infowindow.open(map, marker);
+              });
+            }
+
+            // 원 추가 함수
+            function addCircle(position) {
+              // 지도에 표시할 원을 생성합니다
+              var circle = new kakao.maps.Circle({
+                center: position,  // 원의 중심좌표 입니다 
+                radius: circle_redius, // 미터 단위의 원의 반지름입니다 
+                strokeWeight: 2, // 선의 두께입니다 
+                strokeColor: '#FFC31E', // 선의 색깔입니다
+                strokeOpacity: 0.8, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle: 'dashed', // 선의 스타일 입니다
+                fillColor: '#FDE1B4', // 채우기 색깔입니다
+                fillOpacity: 0.3  // 채우기 불투명도 입니다   
+              });
+              // 지도에 원을 표시합니다 
+              circle.setMap(map);
+            }
+
+            // 거리 계산 함수
+            function calcLength(position1, position2) {
+              var polyline = new kakao.maps.Polyline({
+                path: [position1, position2]
+              });
+              return polyline.getLength()
+            }
+            //************************************ 인포윈도우 ************
+
+            // 지도 로딩 후 채팅방 데이터 목록 조회
+            kakao.maps.event.addListener(
+              map,
+              "tilesloaded",
+              function (mouseEvent) {
+                for (const item of pin_list) {
+                  let position = new kakao.maps.LatLng(item.lat, item.lng);
+                  chat_title = item.title;
+                  addMarker(position);
+                }
+              }
+            );
+          </script>
+        </div>
+      </div>
+      <!--**********************************            Content body end        ***********************************-->
+    </div>
+
+    <!--**********************************            Footer start        ***********************************-->
+    {% include 'footer.html'%}
+    <!--**********************************            Footer end        ***********************************-->
+
+    <!--**********************************        Scripts    ***********************************-->
+    <!-- Required vendors -->
+    <script src="/static/vendor/global/global.min.js"></script>
+    <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+
+
+
+    <script src="/static/vendor/owl-carousel/owl.carousel.js"></script>
+    <script src="/static/js/custom.min.js"></script>
+    <script src="/static/js/deznav-init.js"></script>
+</body>
+
+</html>
