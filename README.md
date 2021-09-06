@@ -1,2 +1,2 @@
 # ARabong
- kfq2021_ai_project
+ 한국품질재단KFQ_
